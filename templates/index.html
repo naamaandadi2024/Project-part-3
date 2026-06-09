@@ -17,7 +17,7 @@
         <input type="number" id="runtimeMinutes" placeholder="למשל: 120" required><br>
 
         <label>ז'אנרים (genres):</label>
-        <input type="text" id="genres" placeholder="['Drama', 'Action']" required><br>
+        <input type="text" id="genres" placeholder="Drama, Action" required><br>
 
         <label>מדינה (Country):</label>
         <input type="text" id="Country" placeholder="למשל: USA" required><br>
@@ -26,7 +26,7 @@
         <textarea id="plot" placeholder="תקציר הסרט..." required></textarea><br>
 
         <label>מזהי שחקנים (lead_actors_ids):</label>
-        <input type="text" id="lead_actors_ids" placeholder="['nm001', 'nm002']" required><br>
+        <input type="text" id="lead_actors_ids" placeholder="nm001, nm002" required><br>
 
         <button type="submit"><b>Predict Rating</b></button>
     </form>
@@ -38,6 +38,13 @@
             e.preventDefault();
             const resultDiv = document.getElementById('result');
             
+            // תרגום אוטומטי של השחקנים לפורמט שהקוד בפייתון דורש
+            let rawActors = document.getElementById('lead_actors_ids').value;
+            let formattedActors = rawActors;
+            if (!rawActors.trim().startsWith('[')) {
+                formattedActors = "['" + rawActors.split(',').map(s => s.trim()).join("','") + "']";
+            }
+            
             const payload = {
                 Language: document.getElementById('Language').value,
                 startYear: parseFloat(document.getElementById('startYear').value),
@@ -45,7 +52,7 @@
                 genres: document.getElementById('genres').value,
                 Country: document.getElementById('Country').value,
                 plot: document.getElementById('plot').value,
-                lead_actors_ids: document.getElementById('lead_actors_ids').value
+                lead_actors_ids: formattedActors
             };
 
             try {
