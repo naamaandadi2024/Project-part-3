@@ -8,25 +8,25 @@
     <h1>חיזוי דירוג סרט</h1>
     <form id="predictionForm">
         <label>שפה (Language):</label>
-        <input type="text" id="Language" placeholder="למשל: English" required><br>
+        <input type="text" id="Language" placeholder="למשל: English"><br>
 
         <label>שנת התחלה (startYear):</label>
-        <input type="number" id="startYear" placeholder="למשל: 2025" required><br>
+        <input type="number" id="startYear" placeholder="למשל: 2025"><br>
 
         <label>דקות (runtimeMinutes):</label>
-        <input type="number" id="runtimeMinutes" placeholder="למשל: 120" required><br>
+        <input type="number" id="runtimeMinutes" placeholder="למשל: 120"><br>
 
         <label>ז'אנרים (genres):</label>
-        <input type="text" id="genres" placeholder="Drama, Action" required><br>
+        <input type="text" id="genres" placeholder="Drama, Action"><br>
 
         <label>מדינה (Country):</label>
-        <input type="text" id="Country" placeholder="למשל: USA" required><br>
+        <input type="text" id="Country" placeholder="למשל: USA"><br>
 
         <label>תקציר (plot):</label>
-        <textarea id="plot" placeholder="תקציר הסרט..." required></textarea><br>
+        <textarea id="plot" placeholder="תקציר הסרט..."></textarea><br>
 
         <label>מזהי שחקנים (lead_actors_ids):</label>
-        <input type="text" id="lead_actors_ids" placeholder="nm001, nm002" required><br>
+        <input type="text" id="lead_actors_ids" placeholder="nm001, nm002"><br>
 
         <button type="submit"><b>Predict Rating</b></button>
     </form>
@@ -41,7 +41,7 @@
             // תרגום אוטומטי של השחקנים לפורמט שהקוד בפייתון דורש
             let rawActors = document.getElementById('lead_actors_ids').value;
             let formattedActors = rawActors;
-            if (!rawActors.trim().startsWith('[')) {
+            if (rawActors.trim() && !rawActors.trim().startsWith('[')) {
                 formattedActors = "['" + rawActors.split(',').map(s => s.trim()).join("','") + "']";
             }
             
@@ -68,6 +68,7 @@
                     resultDiv.style.color = "green";
                     resultDiv.innerText = `Predicted Rating: ${data.predicted_rating.toFixed(1)} / 10`;
                 } else {
+                    // כאן תוצג שגיאת ה-400 שתגיע מה-API שלך!
                     resultDiv.style.color = "red";
                     resultDiv.innerText = `שגיאה: ${data.error}`;
                 }
