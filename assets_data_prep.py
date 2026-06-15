@@ -2,10 +2,6 @@ import pandas as pd
 import numpy as np
 import ast
 import matplotlib.pyplot as plt
-
-
-
-
 def prepare_data(df_input):
     df = df_input.copy()
     import ast
@@ -53,6 +49,6 @@ def prepare_data(df_input):
     df['decade'] = (df['startYear'] // 10) * 10
   
    
-    df = df.drop(columns=['numVotes', 'BoxOffice', 'tconst', 'primaryTitle', 'plot', 'Country', 'Language', 'genres','budget','averageRating'])
+    df = df.drop(columns=['numVotes', 'BoxOffice', 'tconst', 'primaryTitle', 'plot', 'Country', 'Language', 'genres','budget','averageRating'],errors='ignore')
 
     return df  
