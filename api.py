@@ -30,18 +30,26 @@ def predict():
             if field not in data or str(data[field]).strip() == "":
                 return jsonify({'error': f'Missing or empty field: {field}'}), 400
 
-        # 2. בדיקות תקינות: אסור שיהיו מספרים ב-Language, Genres, Country
+        # . בדיקות תקינות: אסור שיהיו מספרים ב-Language, Genres, Country
    
         text_fields = ['Language', 'genres', 'Country']
         for field in text_fields:
             if not has_no_numbers(data[field]):
                 return jsonify({'error': f'{field} cannot contain numbers'}), 400
+
+       # --- בדיקה : מפרקים לפי פסיק ובודקים שאין רווחים בתוך שום חלק ---
+        parts = data['lead_actors_ids'].split(',')
+        for part in parts:
+            # אם אחרי הורדת רווחים מהקצוות עדיין נשאר רווח בפנים, זה אומר שיש רווח לא תקין
+            if ' ' in part.strip():
+                 return jsonify({'error': 'Invalid format: separate actors with commas only (no spaces inside the actor IDs)'}), 400
         
-        # 3. בדיקת פורמט שנה (4 ספרות בדיוק)
+        
+        # . בדיקת פורמט שנה (4 ספרות בדיוק)
         if not re.match(r'^\d{4}$', str(data['startYear'])):
             return jsonify({'error': 'Year must be exactly 4 digits'}), 400
 
-        # 4. עיבוד הנתונים
+        # . עיבוד הנתונים
         data['lead_actors_ids'] = str([a.strip() for a in data['lead_actors_ids'].split(',')])
         df = pd.DataFrame([data])
         df['startYear'] = df['startYear'].astype(float)
